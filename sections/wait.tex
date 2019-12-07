@@ -1,0 +1,36 @@
+
+\section{wait()}
+%% * wait
+%%   - when it waits
+%%   - when it doesn't
+%%   - what it really is for
+
+%   man 2 wait
+%       All  of  these  system  calls  are used to wait for state changes in a child of the calling process, and obtain information about the child whose state has changed.  A
+%       state change is considered to be: the child terminated; the child was stopped by a signal; or the child was resumed by a signal.  In the case of  a  terminated  child,
+%       performing  a  wait  allows  the system to release the resources associated with the child; if a wait is not performed, then the terminated child remains in a "zombie"
+%       state (see NOTES below).
+%
+%       If a child has already changed state, then these calls return immediately.  Otherwise, they block until either a child changes state or a signal handler interrupts the
+%       call  (assuming  that  system calls are not automatically restarted using the SA_RESTART flag of sigaction(2)).  In the remainder of this page, a child whose state has
+%       changed and which has not yet been waited upon by one of these system calls is termed waitable.
+
+Wait is used to wait for a change of state in a child process, and to obtain
+information about the child process whose state has changed.
+
+A state change is considered to be:
+\begin{itemize}
+\item The child terminated
+  \begin{itemize}
+  \item In this case, performing a wait allows the system to release the
+    resources associated with the child who terinated. \textbf{If a wait is not
+      performed, the child is considered to be a ``zombie''}
+  \end{itemize}
+\item The child was stopped by a signal
+\item The child was resumed by a signal
+\end{itemize}
+
+If the child has already changed states then a call to wait will return
+immediately. Else they will block until either a child changes state or a signal
+handler interrupts the call.
+

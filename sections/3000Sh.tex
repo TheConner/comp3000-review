@@ -1,0 +1,57 @@
+\section{How2Shell}
+
+How a shell works (generally):
+\begin{itemize}
+\item A shell is just another program.
+\item What happens when a user runs a program:
+  \begin{itemize}
+  \item Based on the \texttt{PATH} environment variable, the shell will search for
+    binaries that correspond to the user's requrest.
+  \item If the user specified output redirection, the shell will redirect STDOUT
+    / STDIN appropriately (see section on this)
+  \item Fork the current process, the child proccess will execute the specified
+    program.
+  \item The child process sends a signal to the parent process (shell), shell
+    continues execution.
+  \end{itemize}
+\end{itemize}
+There are exceptions for I/O redirection, piping, and running programs in the
+background, however the above workflow applies to all of those cases.
+
+\section{Working Dir}
+%% * cd, working directory
+
+The working directory represents where your program, or shell, currently is.
+\begin{itemize}
+\item To change the current working directory in bash, use the \texttt{cd}
+  command.
+\item To change the current working directory in C, use the \texttt{chdir()} function.
+\end{itemize}
+
+\section{Globbing and Wildcards}
+%% * globbing, who does it
+
+Globbing and wildcard matching is something done by the shell, with logic
+  implemented by the C library \texttt{glob.h}, or the logic can be defined
+  manually. It dosen't really matter as long as it behaves like a normal glob
+
+\subsection{How To Glob}
+
+Consider the following files:
+
+\begin{verbatim}
+book1 book2 book3 potato1 potato2 potato3
+\end{verbatim}
+
+To get all books, a few possible wildcard statements would be \texttt{b*},
+\texttt{book*}, etc. If I wanted to get all things with a 3 I could do
+\texttt{*3}.
+If I wanted to get everything containing the letter o and the number 2, I could
+do \texttt{*o*2}
+
+Globbing isn't understood by a program, so all of these glob statements
+\textbf{expand} out to be a list of files, i.e
+\begin{verbatim}
+b* = book1 book2 book3
+\end{verbatim}
+

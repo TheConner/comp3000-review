@@ -1,0 +1,94 @@
+\documentclass{article}
+%% Needed packages
+\usepackage[letterpaper, margin=1in]{geometry}
+\usepackage{amsmath}
+\usepackage{amsfonts}
+% Generic note template
+\usepackage{amssymb}
+\usepackage{makeidx}
+\usepackage{graphicx}
+\usepackage[usenames,dvipsnames,table]{xcolor}
+%% USE CMBR
+\usepackage{cmbright}
+
+%% Use fancyheader
+\usepackage{fancyhdr}
+\usepackage{lastpage}
+\pagestyle{fancy}
+\fancyhead{}
+\fancyfoot{}
+% Set header options
+\lhead{ COMP3000 }
+\rhead{ Exam Review }
+\renewcommand{\headrulewidth}{0.25pt}
+\renewcommand{\footrulewidth}{0.25pt}
+% Set footer options
+\cfoot{\thepage}
+
+%% SOLUTION FORMATTING
+\usepackage[usenames,dvipsnames]{xcolor}
+\usepackage{bm}
+\newenvironment{ans}%
+{\\\setlength\parindent{0pt}\fontfamily{cmbr}\selectfont\color{Red!25!Violet}}%
+{\par}
+
+%% C source code formatting
+ %% For SQL formatting
+ %% SQL specific environment
+\usepackage{listings}
+\definecolor{pblue}{rgb}{0.13,0.13,1}
+\definecolor{pgreen}{rgb}{0,0.5,0}
+\definecolor{pred}{rgb}{0.9,0,0}
+\definecolor{pgrey}{rgb}{0.46,0.45,0.48}
+\lstnewenvironment{csrc}{
+  \lstset{language=C,
+  showspaces=false,
+  showtabs=false,
+  breaklines=true,
+  showstringspaces=false,
+  breakatwhitespace=true,
+  commentstyle=\color{pgreen},
+  keywordstyle=\color{pblue},
+  stringstyle=\color{pred},
+  basicstyle=\ttfamily,
+  moredelim=[il][\textcolor{pgrey}]{$$},
+  moredelim=[is][\textcolor{pgrey}]{\%\%}{\%\%},
+  frame=single,
+  rulecolor=\color{blue},
+  numbers=left,
+}
+}{}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%             CONFIG END              %
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\title{ COMP3000 Exam Review }
+\author{}
+% Remove date from title page
+\date{}
+
+\begin{document}
+	%% Pre-midterm stuff
+	\input{sections/EnvironmentVariables}
+	\input{sections/wait}
+	\input{sections/3000Sh}
+	\input{sections/IORedir}
+	\input{sections/UMask}
+	\input{sections/Syscalls}
+	\input{sections/TTYProc}
+	\input{sections/SignalHandlers}
+	\input{sections/Pipes}
+	\input{sections/BasicFSLinks}
+	\input{sections/ObjFiles}
+	\input{sections/ProcessBasic}
+	\input{sections/3000copy}
+	\input{sections/Ass}
+	\input{sections/IO}
+	\input{sections/mmap}
+	%% Post midterm stuff
+	
+	%% Questions
+	\input{questions/MidtermSample}
+\end{document}
+

@@ -1,0 +1,15 @@
+\section{Assembly RBP, RSP}
+%% Difference between base pointer (%rbp) and the stack pointer (%rsp) registers.
+%%  * stack pointer is used to maintain the stack, is automatically changed by
+%%    instructions like call and ret
+%%  * base pointer register is good for doing relative addressing
+%%    - so good for accessing local variables and parameters
+
+\texttt{RBP} is the base pointer, and \texttt{RSP} is the stack pointer.
+
+\begin{itemize}
+\item \texttt{RSP} memory address at the top of the stack 
+\item \texttt{RBP} memory address of any stack frame, moves around the stack.
+\end{itemize}
+
+

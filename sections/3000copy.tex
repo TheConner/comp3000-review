@@ -1,0 +1,69 @@
+
+\section{3000Copy Sequence of Operations}
+%% * 3000copy (mmap & rw), sequence of operations
+In all cases, we perform the following initalization steps:
+\begin{enumerate}
+\item Parse the source and destination args
+\item Open the source and dest files, get the file descriptors
+\end{enumerate}
+
+\subsection{RW Implementation}
+\begin{csrc}
+done = 0;
+while (!done) {
+        len = read(source_fd, buf, BUFSIZE);
+        if (len == -1) {
+                report_error("reading source", strerror(errno));
+        }
+
+        if (len > 0) {
+                if (write(dest_fd, buf, len) == -1) {
+                        report_error("writing dest", strerror(errno));
+                }
+        } else {
+                done = 1;
+        }
+}
+\end{csrc}
+\begin{enumerate}
+\item Read in a maximum of BUFSIZE bytes into our buffer, take note of how many
+  bytes we read
+\item If we have bytes, write them to the destination file
+\item Else we are done! Close file descriptors.
+\end{enumerate}
+
+\subsection{MMAP Implementation}
+\begin{csrc}
+        len = statbuf.st_size;
+        source_map = (char *) mmap(NULL, len,
+                                   PROT_READ, MAP_SHARED, source_fd, 0);
+
+        if (source_map == MAP_FAILED) {
+                report_error("source map", strerror(errno));
+        }
+
+        if (stat(dest_fn, &statbuf) == -1) {
+                printf("%s does not exist, creating\n", dest_fn);
+        } else {
+                printf("%s exists, overwriting\n", dest_fn);
+        }
+
+        //... repeat the above for the dest FD
+
+        printf("Copying bytes...\n");
+
+        for (i = 0; i < len; i++) {
+                dest_map[i] = source_map[i];
+        }
+\end{csrc}
+\begin{enumerate}
+\item Open the source and dest file, get the file descriptors.
+\item Get the length of the source file. Create a mapping the size of the source
+  file into virtual memory using the FD we got from opening the source file.
+\item Get the length of the dest file. Create a mapping of the size of the dest
+  file into virtual memory using the FD we got from opening the dest file.
+\item Iterate over the source map, transferring its values to the destination
+  map.
+\item Close the file descriptors
+\end{enumerate}
+

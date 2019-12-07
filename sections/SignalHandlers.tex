@@ -1,0 +1,75 @@
+
+\section{Signal Handlers}
+%% * signal handlers
+%%   - how to define
+%%   - when called
+%%   - interrupting system calls
+
+\subsection{How To Define and Register}
+
+Typically a signal handler is defined in a method, and looks like this:
+\begin{csrc}
+void signal_handler(int the_signal)
+{
+  int pid, status;
+
+  if (the_signal == SIGHUP) {
+    fprintf(stderr, "Received SIGHUP.\n");
+    return;
+  }
+        
+  if (the_signal != SIGCHLD) {
+    fprintf(stderr, "Child handler called for signal %d?!\n",
+            the_signal);
+    return;
+  }
+
+  pid = wait(&status);
+
+  if (pid == -1) {
+    /* nothing to wait for */
+    return;
+  }
+
+  if (WIFEXITED(status)) {
+    fprintf(stderr, "\nProcess %d exited with status %d.\n",
+            pid, WEXITSTATUS(status));
+  } else {
+    fprintf(stderr, "\nProcess %d aborted.\n", pid);
+  }
+}
+\end{csrc}
+In the above example we have a generic method that takes an int (since that's
+all a signal is) and then we provide logic depending on the signals we want to handle.
+
+Signal handlers are typically registered when a program starts up, in the main
+method.
+\begin{csrc}
+int main(int argc, char *argv[], char *envp[])
+{
+  // A struct for signal handlers
+  struct sigaction signal_handler_struct;
+
+  // Fill the struct with 0s
+  memset (&signal_handler_struct, 0, sizeof(signal_handler_struct));
+
+  // Assuming we have a signal_handler method
+  signal_handler_struct.sa_handler = signal_handler;
+
+  // Provide  behavior  compatible with BSD signal semantics by making certain system calls restartable across signals.
+  signal_handler_struct.sa_flags = SA_RESTART;
+
+  // Now we can register our signals to our signal handler.
+  if (sigaction(SIGCHLD, &signal_handler_struct, NULL)) {
+    fprintf(stderr, "Couldn't register SIGCHLD handler.\n");
+  }
+
+  if (sigaction(SIGHUP, &signal_handler_struct, NULL)) {
+    fprintf(stderr, "Couldn't register SIGHUP handler.\n");
+  }
+
+  // ... rest of your program
+}
+\end{csrc}
+
+

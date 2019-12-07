@@ -1,0 +1,34 @@
+
+\section{Umask}
+%% * umask
+%%   - how it affects open calls, which kinds (when you create a file)
+
+Umasks, or file mode creation masks, are groupings of bits that define
+permissions for files.
+
+First, consider the model that is used for file permissions:
+\begin{itemize}
+\item User -- permissions for the immediate user
+\item Group -- permissions for users that are in a files group
+\item Others -- permissions for all other users 
+\end{itemize}
+For each class there corresponds a set of bits that represent the actions that
+can be applied to the file:
+\begin{itemize}
+\item r -- read access to the file.
+\item w -- write access to the file.
+\item x -- permission to execute the file.
+\end{itemize}
+
+These permissions values can be represented as three bits, in the order RWX. For
+instance to specify read, write, and not execute, the corresponding value will
+be \texttt{110}.
+
+\textbf{Translation to octal:} each set of these bits is effectively an octal
+value (base 7). So all of these binary values can be represented as octal, for
+example
+\begin{itemize}
+\item RWX-RWX-RWX = 111 111 111 = 777 permissions
+\item RW--RW--R-- = 110 110 100 = 664 permissions
+\end{itemize}
+

@@ -1,0 +1,20 @@
+
+\section{System and Library Calls}
+%% * system calls versus library calls (open, opendir, etc)
+%%   - how the names aren't always the same
+
+System calls are one layer above the kernel -- all a system call does is asks
+the kernel to do something. They are very low level. Library calls consist of
+system calls, so library calls can be thought of as an \textit{abstraction} of
+system calls
+
+\begin{verbatim}
+     Applications
+     ------------
+Shell   Library Routines
+-------------------------
+    System Calls
+    ------------
+       Kernel
+\end{verbatim}
+

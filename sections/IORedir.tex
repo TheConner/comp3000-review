@@ -1,0 +1,35 @@
+
+\section{I/O Redirection}
+%% * I/O redirection
+%%   - how to do it
+
+The I/O redirection we implemented is \textit{ms-dos} style. Because dos could
+only run one process at a time, the general workflow was something like this
+
+\begin{enumerate}
+\item Run process A and put the output to some TMP file \texttt{A > tmpfile}
+\item Run process B with the input redirected from the tmpfile \texttt{B < tmpfile}
+\end{enumerate}
+
+In a more modern multiprocess system this would not involve writing anything to
+the disk -- however here is how we implemented this in 3000shell:
+
+\begin{enumerate}
+\item Run process A and put the output to some TMP file \texttt{A > tmpfile}
+  \begin{enumerate}
+  \item \textbf{Run process A:} fork the current process, wait for the child to
+    finish.
+  \item \textbf{Put the output to some TMP file:} \texttt{open} the tmpfile, get
+    the file descriptor. Create a copy of the old file descriptor, redirect stdout
+    to the output file.
+  \end{enumerate}
+\item Run process B with the input redirected from the tmpfile \texttt{B}
+    \begin{enumerate}
+    \item \textbf{Run process B:} fork the current process, wait for the child to
+    finish.
+  \item \textbf{Put the output to some TMP file:} \texttt{open} the tmpfile, get
+    the file descriptor. Create a copy of the old file descriptor, redirect stdout
+    to the output file.
+  \end{enumerate}
+\end{enumerate}
+

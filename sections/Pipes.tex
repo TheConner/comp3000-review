@@ -1,0 +1,18 @@
+
+\section{UNIX Pipes}
+%% * UNIX pipes basics
+
+The unix pipeline redirects the standard output of one program to the standard
+input of another program.
+
+\textbf{NOTE} in assignment 1 we implemented a MS-DOS style pipe command which
+is different from what happens in UNIX. MS-DOS, because it could only run one
+program at a time, would do the following
+\begin{itemize}
+\item Run program A, redirecting stdout to a temporary file \texttt{A >
+    tmp.txt}
+\item Run program B, redirecting stdin from a temporary file \texttt{B <
+    tmp.txt}
+\item This would happen seamlessly when the user types \texttt{A | B}
+\end{itemize}
+

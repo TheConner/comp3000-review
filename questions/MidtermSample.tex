@@ -1,0 +1,159 @@
+\pagebreak
+\begin{center}
+  \Large \textbf{Sample Questions}
+\end{center}
+\begin{enumerate}
+\item What system call is used to load a progam binary in Linux? Does this
+  system call create a new process?
+  \begin{ans}
+    \texttt{execve}, and no -- \texttt{fork} is used to create a process.
+  \end{ans}
+\item Dynamially linked programes generally make many mmap calls at the start of
+  program execution that a statically linked version of the program dosen't do.
+  What are those mmap system calls for?
+  \begin{ans}
+    Because the programm is \textit{dynamically linked} the mmap calls are to
+    map libraries into the process's address space
+  \end{ans}
+\item Symbolic links map filenames to filenames. What do hard links map
+  filenames to?
+  \begin{ans}
+    inodes
+  \end{ans}
+\item What are two standard uses of signals in Linux? Do not list application
+  specific signals like \texttt{SIGUSR1}
+  \begin{ans}
+    Some examples that can be used are \texttt{SIGTERM, SIGKILL, SIGINT,
+      SIGCHILD}.
+
+    \texttt{SIGINT} -- keyboard interrupt, \texttt{SIGTERM} -- termination
+    signal, \texttt{SIGKILL} -- kill signal (most deadly), \texttt{SIGCHILD} --
+    child stopped or terminated.
+  \end{ans}
+\item Do pointers in C contain virtual or physical addresses? Why?
+  \begin{ans}
+    Pointers contain virtual addresses, because the kernel abstracts the
+    physical memory and users only have access to virtual memory
+  \end{ans}
+\item Does a process make a system call to allocate memory? Why?
+  \begin{ans}
+    A process must make a system call like \texttt{mmap()} in order to allocate
+    memory. Memory is a physical resource, and the kernel controls all system
+    resources, including the virtual-to-physical mapping of memory address
+    spaces. Because of all of this a system call has to be made, since system
+    calls are how we talk to the kernel.
+  \end{ans}
+\item At the prompt of a shell, a user types \texttt{something > output.txt}.
+  What programs the file \texttt{output.txt} -- the \texttt{shell}, or
+  \texttt{something}? Why?
+  \begin{ans}
+    \texttt{shell} opens \texttt{output.txt}. The shell will parse the prompt
+    string, get the filename, open the file and gets a file descriptor for it.
+
+    After forking, the child process that shell forked will replace it's own
+    file discriptor for \texttt{STDOUT} with the output file's FD with a
+    function like \texttt{dup2()}. Finally, the child process will execve
+    \texttt{something} and then the modified FD for \texttt{STDOUT} will persist
+    through the call to \texttt{execve()}
+
+    \texttt{execve()} preserves file descriptors so a running program can do I/O
+    in a generic way that allows programs to be combind together into larger solutions.
+  \end{ans}
+
+\item Is it possible for two or more filenames to refer to the same inode?
+  Explain.
+  \begin{ans}
+    {\large \bfseries HARD. LINK.}
+  \end{ans}
+  
+\item How can a process send a signal?
+  \begin{ans}
+    By using the kill system call.
+  \end{ans}
+  
+\item How can a process change what happens when a signal is received?
+  \begin{ans}
+    By registering a signal handler for a particular signal, this is done with a
+    sigaction system call.
+  \end{ans}
+\item Can a process change what happens when any signal is received?
+  \begin{ans}
+    No, some signals such as KILL and STOP have predefined signal handlers that
+    can't be overwritten.
+  \end{ans}
+  
+\item When a process receives a signal, what happens to the function that the
+  process was already running?
+  \begin{ans}
+    The function is paused and its execution context is pushed onto the function
+    call stack, the signal handler fucks shit up,
+    and it resumes from where it left off once the signal handler finishes.
+  \end{ans}
+  
+\item Consider the following code from 3000shell:
+\begin{csrc}
+if (background) {
+  fprintf(stderr, ``running in background'');
+} else {
+  pid = wait(ret_status);
+}
+\end{csrc}
+  \begin{enumerate}
+  \item What does 3000shell.c call before this in order to create a child
+    process?
+    \begin{ans}
+      \texttt{fork()}
+    \end{ans}
+  \item What does the call to wait() above do?
+    \begin{ans}
+      It waits for the child process to exit, it returns the PID that exited,
+      and ret-status is a variable being passed-by-reference, so if the return
+      status is non-null wait will put it into the ret\_status variable
+    \end{ans}
+  \item When does 3000shell also call wait()?
+    \begin{ans}
+       It also calls wait in the SIGCHLD signal handler. The kernel sends 3000shell a SIGCHLD signal when
+a child process terminates. The signal handler code is necessary to take care of background processes (i.e.,
+prevent them from becoming zombies).
+    \end{ans}
+  \item Does the process that executes the above code also run the program the
+    user has typed in at the command prompt? Explain briefly.
+    \begin{ans}
+      It does not. The above code runs in the main 3000shell process. Commands are execve’d in child processes.Only the child processes can call execve because otherwise 3000shell would effectively terminate by running
+execve.
+    \end{ans}
+  \end{enumerate}
+\item MMAP is declared as follows:
+\begin{csrc}
+void *mmap(void *addr, size_t length, int prot, int flags,
+                  int fd, off_t offset);
+\end{csrc}
+  \begin{enumerate}
+  \item At a high level, what does mmap do?
+    \begin{ans}
+      mmap associates (or maps) the contents of a file with a range of memory
+      addresses without reading the entire file into memory -- very cool stuff!
+      If we don't specify a file it will just allocate us memory to fap around with.
+    \end{ans}
+  \item  What’s the difference between setting flags to be MAP\_SHARED versus
+    MAP\_PRIVATE in the context of child processes?
+    \begin{ans}
+      With MAP\_SHARED, all child processes will share the same memory, changes made by one will be visible
+to all. Also, if a file descriptor was specified, its contents will be changed when the corresponding memory is
+changed. With MAP\_PRIVATE, all changes to memory are private. Every process has its own unique copy
+(with its contents being copied on fork like all other regular memory). Further, the opened file is not changed
+to reflect the changes to the mapped copy.
+\end{ans}
+\item  If we open a file and mmap it, setting prot=PROT\_READ|PROT WRITE and flags=MAP\_PRIVATE, can we
+modify the memory that is returned by mmap? If we modify this memory, will it
+modify the file as well? Explain briefly.
+\begin{ans}
+   If we set PROT\_READ and PROT\_WRITE, we can indeed modify the returned memory. Any changes,
+however, will be private if MAP\_PRIVATE is specified, so the opened file will not be changed; the initial
+contents of memory will be the same as the file, but subsequent changes will be private to the process.
+\end{ans}
+
+
+
+  \end{enumerate}
+\end{enumerate}

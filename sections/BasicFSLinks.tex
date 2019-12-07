@@ -1,0 +1,69 @@
+
+\section{Hard Links vs Symlinks}
+%% * hard links versus symbolic links
+
+\subsection{Hard Links}
+A hard link can be thought of as a second filename. For example, inode $x$ can
+have filename \texttt{blah.txt} when it's created, but if I hardlink
+\texttt{blah.txt} to \texttt{notblah.txt} I'm just updating that inode's record
+with two names: \texttt{blah.txt} and \texttt{notblah.txt}
+
+Hard linking is done by \texttt{ln source dest}. A hardlink appears as a
+copy of a file, but editing it edits both filenames (since they link to the same
+inode).
+
+Hard links, because of how they're created, are hard to tell from regular files
+(since they are also regular files). In the below example I created file.txt,
+and ass.txt which hardlinks to file.txt
+
+\begin{verbatim}
+$ ls -al
+total 8
+drwxr-xr-x 1 conner users 30 Oct 12 16:08 .
+drwxr-xr-x 1 conner users 52 Oct 12 16:07 ..
+-rw-r--r-- 2 conner users 15 Oct 12 16:10 ass.txt
+-rw-r--r-- 2 conner users 15 Oct 12 16:10 file.txt
+\end{verbatim}
+
+Hmm, these appear to be the same. A simple way to tell if a hardlink exists is
+to look at the \textbf{inode} that it corresponds to. This can be done with
+\texttt{ls -i} 
+
+\begin{verbatim}
+$ ls -li
+total 8
+1471517 -rw-r--r-- 2 conner users 15 Oct 12 16:10 ass.txt
+1471517 -rw-r--r-- 2 conner users 15 Oct 12 16:10 file.txt
+\end{verbatim}
+Because the inodes for those two files are the same, we know that they are
+hardlinked together.
+
+\subsection{Soft Links}
+A soft link, or symlink, can be thought of as a pointer to an inode. The
+difference between a symlink and a hard link is that this \textbf{not} another
+name added to an existing file, rather, it's a new file that points to the inode
+of another file. This means that the source file has to exist in order for the
+symlink to be valid.
+
+Symlinks are created by \texttt{ln -s source dest}, and dest will have a new
+inode that points to the source file. See below for an example
+
+Here, I created \texttt{link} which points to \texttt{file.txt}
+\begin{verbatim}
+$ ls -al
+drwxr-xr-x 1 conner users 24 Oct 12 16:16 .
+drwxr-xr-x 1 conner users 52 Oct 12 16:07 ..
+-rw-r--r-- 1 conner users 15 Oct 12 16:10 file.txt
+lrwxrwxrwx 1 conner users  8 Oct 12 16:16 link -> file.txt
+\end{verbatim}
+
+We know right away that it's an symlink because of the arrow in ls, and we can
+verify the symlink resides on another inode from \texttt{ls -i}
+
+\begin{verbatim}
+$ ls -li
+total 8
+1471517 -rw-r--r-- 1 conner users 15 Oct 12 16:10 file.txt
+1471741 lrwxrwxrwx 1 conner users  8 Oct 12 16:16 link -> file.txt
+\end{verbatim}
+

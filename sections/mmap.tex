@@ -1,0 +1,69 @@
+\section{\texttt{mmap}}
+
+\textbf{What is this for??}
+
+From what we've used it for, file-backed mapping. If I had a file of size $n$
+and I wanted to read it, my general algorithm would be allocate a buffer to read
+the file, read file, play with file, life is great. However, if my file is size
+$n$ and my memory is size $k$ where $n>k$, we have a problem.
+
+mmap is handy because we never have to malloc anything - mmap will ``map'' the
+file into memory without explicily reading it. Now, when you play with that
+memory area \texttt{mmaped\_file[i]}, those memory operations will
+\textbf{transparently} act on the file. It lets you map files into memory that
+are larger than the available memory on the system using the OS's available
+paging mechanism.
+
+%% 
+%% Couple of key variations
+%%  - read-only mmap of file, normaly with PROT_EXEC
+%%    * load code (executable, libraries)
+%%    * read-only data (no PROT_EXEC)
+%%    
+%%  - read-write mmap, shared, of file
+%%    * modifying file on disk
+%%    
+%%  - read-write mmap, private, of file
+%%    * copy file to memory, modify memory
+%%    
+%%  - read-write mmap, anonymous, shared
+%%    * allocate memory shared between processes
+%% 
+%%  - read-write mmap, anonymous, private
+%%    * allocate memory private to process
+
+There are a few ways of using MMAP:
+\begin{itemize}
+\item \texttt{PROT\_EXEC} -- used for loading executable code
+\item R/W mmap, shared -- used for writing to and modifying files on disk
+\item R/W mmap, private -- used for copying the file into memory and modifying
+  the memory
+\item R/W mmap, anonymous + shared -- used for allocating memory that's shared
+  between processes
+\item R/W mmap, anonymous + privte -- allocate memory to this process.
+\end{itemize}
+
+
+\section{Process Memory Map}
+%% * where local vars, funciton arguments, global vars, stack, heap,
+%% environment/command line args are all in a process's memory relative to each
+%% other
+
+From the lowest to the highest address:
+\begin{itemize}
+\item \textbf{Text segment}: contains executable instructions, this is placed
+  below the heap or stack in order to prevent heaps and stack overflows from
+  overwriting it.
+\item \textbf{Initialized data}: above the text segment, contains global
+  variables and static 
+\item \textbf{Unitialized data / BSS}: BSS = block started by symbol. Data in
+  this segment is initialized by the kernel before the program starts executing.
+\item \textbf{Heap}: begins after the BSS segment, grows upwards towards the
+  stack. Data in the heap is managed by malloc et al.
+\item \textbf{Stack}: Sits at a high address, grows down towards the heap. the
+  stack holds automatic variables, and \textit{stack frames} -- data about
+  function calls and contexts. In general, we want to use the heap more than the
+  stack because the stack ideally is used for execution-level stuff (frames)
+\end{itemize}
+
+

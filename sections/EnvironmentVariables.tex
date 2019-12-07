@@ -1,0 +1,32 @@
+
+\section{Environment Variables}
+%% * environment variables
+%%   - how they work
+%%   - where they are in memory
+
+Environment variables are constructed in the shell on login. These variables are
+stored by the shell, and typically provide user-specific context and values to
+processes.
+
+Some examples of environment variables are:
+\begin{itemize}
+\item \texttt{PATH} contains the ``path'' to different areas on the system where
+  binaries are located. A sample path could look like
+  \texttt{/usr/local/bin:/usr/bin:/bin}, each of these three directories are
+  searched by the shell to find programs
+\item \texttt{USER} contains the username of the current user that's logged
+    in.
+  \item 
+    \texttt{SHELL} contains the shell that the user is using
+\item etc
+\end{itemize}
+
+You can set environment variables with \texttt{export} on bash, and printing
+them by appending the variable name with a \texttt{\$}. For example, to set and
+print a variable called \texttt{POOP}
+
+\begin{verbatim}
+export POOP=foo
+echo $POOP
+\end{verbatim}
+

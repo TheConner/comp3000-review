@@ -1,0 +1,26 @@
+\section{I/O}
+
+\subsection{File I/O}
+\begin{itemize}
+\item \texttt{open / openat}, the \texttt{open} system call opens a file, if the
+    file does not exist it will be created if the \texttt{O\_CREAT} flag is set.
+\item \texttt{read}, system call to read bits from a file descriptor
+\item \texttt{write}, system call to write bits to a file descriptor
+\item \texttt{lseek}, system call to reposition the file offset of an open file descriptor
+  \begin{itemize}
+  \item lseek past the end of the file and write for a good time
+  \end{itemize}
+\item \texttt{mmap}, map or unmap files into memory, mmap creates a mapping into
+  the virtual address space of the calling process.
+\item \texttt{close}, ass.
+\end{itemize}
+
+\subsection{Directory I/O}
+\begin{itemize}
+\item \texttt{opendir/open}, opens a directory, returns a \texttt{DIR} stream / struct.
+\item \texttt{readdir/getdents64}, readdir is older and is superseded by
+  getdents64, used for getting a directories entries.
+\item \texttt{closedir/close} self explanitory.
+\end{itemize}
+
+
