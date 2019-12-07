@@ -86,9 +86,33 @@
 	\input{sections/Ass}
 	\input{sections/IO}
 	\input{sections/mmap}
+
 	%% Post midterm stuff
+ 	%% - dd, relation to system calls
+	\input{sections/DiskDestroyer}
+ 	%% - mkfs.ext4, df, rsync, chown, mount, umount, sudo, fsck
+ 	%% - truncate, holes in files, logical vs physical
+ 	%% - sshfs inodes
+	%% - restriction on userspace filesystems
+ 	%%   (root, other users can't access them)
+ 	%% - sshfs performance
+	%% - setting up keypair-based auth (authorized_keys, id_rsa, id_rsa.pub)
+ 	%% - superblocks
+	\input{sections/FSEtAl}
+ 	%% - trace command, what you can do with it
+ 	%%    (very picky commands so will be higher-level questions)
+	
+ 	%% - what ebpf is, what it can do
+	
+ 	%% - what are kernel modules, how they relate to rest of the kernel,
+ 	%%   how they are different from processes and ebpf scripts
+	
+ 	%% - why rootkits are bad, what they can do, how they are built
+	
+ 	%% - details of how the modules show in class work (conceptual level)
 	
 	%% Questions
 	\input{questions/MidtermSample}
 \end{document}
+
 

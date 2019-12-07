@@ -1,0 +1,37 @@
+\section{Process Memory Map}
+%% * where local vars, funciton arguments, global vars, stack, heap,
+%% environment/command line args are all in a process's memory relative to each
+%% other
+
+From the lowest to the highest address:
+\begin{itemize}
+\item \textbf{Text segment}: contains executable instructions, this is placed
+  below the heap or stack in order to prevent heaps and stack overflows from
+  overwriting it.
+\item \textbf{Initialized data}: above the text segment, contains global
+  variables and static 
+\item \textbf{Unitialized data / BSS}: BSS = block started by symbol. Data in
+  this segment is initialized by the kernel before the program starts executing.
+\item \textbf{Heap}: begins after the BSS segment, grows upwards towards the
+  stack. Data in the heap is managed by malloc et al.
+\item \textbf{Stack}: Sits at a high address, grows down towards the heap. the
+  stack holds automatic variables, and \textit{stack frames} -- data about
+  function calls and contexts. In general, we want to use the heap more than the
+  stack because the stack ideally is used for execution-level stuff (frames)
+\end{itemize}
+
+
+\section{Process Creation}
+%% * process creation, running programs (fork, execve, exit, wait)
+Unix processes have PID's, an important concept to grasp in context of the
+following functions:
+\begin{itemize}
+\item \texttt{fork}   -- creates a child process off of the parent, essentially
+  a clone of the parent that runs alongside it. The UNIX equivalent of getting pregnant.
+\item \texttt{execve} -- Executes an arbitrary binary. This executes in the
+  current process, so if one wants a different PID for the binary to be ran the
+  process should be \texttt{fork}'d beforehand.
+\item \texttt{exit}   -- Returns an exit status to the parent process.
+\item \texttt{wait}   -- Waits for PID to change state.
+\end{itemize}
+
