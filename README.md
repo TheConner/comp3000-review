@@ -27,3 +27,15 @@ If you're not familiar with latex, consider the following editors / IDEs:
 - Emacs + auctex for those who use emacs
 - I hear there's addons for VS code if you enjoy the "open source" (but not really open source) editor.
 
+## Source Organization
+
+To avoid having one massive blob of a latex document, here's how the sources are organized:
+*  **Main Doc**: 3000ExamReview.tex - you should only edit this if you're adding sections
+*  **Sections/**: This folder is full of the individual section files that the main doc pulls from. If you want to add a section, add a new file here. Otherwise feel free to edit existing section files with content that is relevant to them. *Note*: section files can contain multiple `\section`s, they just have to fit into the "high level" concept of each section file
+*  **questions/**: This folder is where we can put all sample questions / practice questions, and answers. As of writing, I only have some sample questions I wrote for the midterm. I (or someone else) will probably add more questions soon
+
+## Adding a section
+1.  Create a new section, say "MySection.tex" in sections
+2.  Write some quality content
+3.  To see your changes, edit the main doc `3000ExamReview.tex` and add `\input{sections/MySection}` wherever you think the section should go in the main doc. Order does matter here, since the calls to `\input` are done in order
+4.  Compile, life should be good!
