@@ -4,7 +4,9 @@ Exam review for COMP3000 F19.
 This is built in LaTeX and should require a pretty complete TEX distro to compile. On linux, TeXLive is the way to go. On Windows use MIKTex since it dynamically downloads packages so you don't end up taking up a ton of disk space with packages you don't need.
 
 # Contributing
-If you find errors - which is likely since my knowledge of 3000 pretty good but far from perfect - shoot me a message, or if you'd like you can make an account on this GitLab instance and make the changes yourself.
+If you find errors - which is likely since my knowledge of 3000 pretty good but far from perfect - shoot me a message, or if you'd like you can make an account on this GitLab instance and make the changes yourself. 
+
+**Note**: If you want to use git, make an account on this gitlab instance, navigate to this repository then "request access". I'll accept all requests, and then you should be able to merge to the main branch of this repository.
 
 If you're not familiar with Git or LaTeX, I'll happily make the changes for you. DM me with issues, additions, philosophical thoughts on life, etc, or if you'd like your efforts to be tracked make an account on this gitlab instance and submit an issue request on this repository.
 
