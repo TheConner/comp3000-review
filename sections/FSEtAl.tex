@@ -1,16 +1,35 @@
 % I decided to make one file for "filesystems et al" since all of these topics group together well
- 	%% - mkfs.ext4, df, rsync, chown, mount, umount, sudo, fsck
+
  	%% - truncate, holes in files, logical vs physical
- 	%% - sshfs inodes
 	%% - restriction on userspace filesystems
  	%%   (root, other users can't access them)
- 	%% - sshfs performance
-	%% - setting up keypair-based auth (authorized_keys, id_rsa, id_rsa.pub)
- 	%% - superblocks
+	 %% - superblocks
+
 \section{File Systems}
 \subsection{Filesystem Commands}
+% - mkfs.ext4, df, rsync, chown, mount, umount, sudo, fsck
+\begin{itemize}
+	\item \texttt{sudo} -- you will want to be root in order to mount and unmount filesystems.
+	\item \texttt{mount file path} -- mounts filesystem at file to path. 
+	\item \texttt{umount path} -- unmounts filesystem at location path.
+	\item \texttt{rsync SRC DEST} -- advanced copy / sync utility. Uses a delta transfer algorithm to only transfer what is new / updated between the SRC and DEST. 
+	\begin{itemize}
+		\item -a "archive" flag corresponds to -rlptgoD
+		\item -r recursive
+		\item -l preserve symlinks
+		\item -p preserve permissions
+		\item -t preserve modification times
+		\item -g preserve group info
+		\item -o preserve owner info
+		\item -D corresponds to --devices and --specials, which preserve device and special files  
+	\end{itemize}
+	\item \texttt{df} "disk free", gives a report on disk usage. \texttt{df -h} is a very common command
+	\item \texttt{chown OWNER[:[GROUP]] FILE} changes the ownership and group ownership info of a file, can be used recursively
+	\item \texttt{mkfs.ext4} -- formats a file with a ext4 filesystem
+\end{itemize}
 
 \subsection{Truncate and DD}
+
 
 \subsection{Filesystem Holes}
 
@@ -18,7 +37,48 @@
 
 \subsection{Logical and Physical}
 
-\subsection {SSHFS}
-
 \subsection{Userspace Filesystem Restrictions}
 
+	 
+ 	%% - sshfs performance
+	%% - setting up keypair-based auth (authorized_keys, id_rsa, id_rsa.pub)
+	%% - sshfs inodes
+\section {SSH and SSHFS}
+\subsection{Key based Authentication}
+SSH does support password authentication, but key based authentication is more secure as it utilizes a private/public key combination that is \textbf{much} harder to crack than a password.
+
+Generating a public / private key pair is a simple process: run \texttt{ssh-keygen}.
+
+todo: add output 
+
+\subsubsection{Transferring the Hard Way}
+Anil likely wanted us to do it the "hard way" so we see how key based auth is set up. It is \textbf{not} how anybody should do this in practice
+
+\begin{verbatim}
+	# Append our public key to a file called authorized keys
+	$ cat ~/.ssh/id_rsa.pub >> authorized_keys
+	# Move the authorized keys file to other@localhosts's home directory
+	$ scp authorized_keys other@localhost:.
+	# Delete our copy of authorized keys file
+	$ rm authorized_keys
+\end{verbatim}
+Then as the other user
+\begin{verbatim}
+	# Log in as the other user over ssh
+	$ ssh other@localhost
+	# Make an ssh config directory
+	$ mkdir ~/.ssh
+	# Make the directory private
+	$ chmod 700 ~/.ssh
+	# Move the authorized keys file to .ssh
+	$ mv ~/authorized_keys ~/.ssh
+	# Make the authorized keys file private 
+	$ chmod 600 ~/.ssh/authorized_keys
+\end{verbatim}
+\textbf{Some problems with this approach:} we overwrite the authorized keys file on the client side, we should be appending to the client's authorized keys file.
+\subsubsection{Transferring The Easy Way}
+After making a key, just use \texttt{ssh-copy-id user@host} to copy your key to some user at some host.
+\subsection{SSHFS Performance}
+Slow. Because of the encryption ssh uses, the performance is going to be decently bad compared to other networked filesystems like nfs and samba. 
+\subsection{SSHFS inodes}
+SSHFS abstracts inodes, so the inodes that would be displayed on the actual client FS would be different than those displayed over sshfs.

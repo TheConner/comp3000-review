@@ -1,0 +1,14 @@
+\section{eBPF}
+BPF, for Berkeley Packet Filter, is a technology used to monitor network traffic. eBPF is an \textit{extended} BPF, it can be used beyond tracing network traffic and is able to trace pretty much anything at the kernel level.
+
+\subsection{eBPF internals}
+eBPF is a framework that lets us write small programs that get injected into the kernel and respond to certain events (disk IO, syscalls, etc). Think of eBPF acting on linux like JavaScript acting on HTML. JS lets us attach event listeners to a variety of HTML elements and respond on events, we can rewrite the HTML DOM using JS, we can do all sorts of stuff to monitor and manipulate the underlying webpage. The interpreter that powers JS is similar to eBPF, not in how it works but what it enables us to do.
+
+You could also write kernel modules to accomplish what eBPF is doing, however modules are complicated, eBPF is much safer since it runs in a virtual machine (see more on this below), and eBPF abstracts away alot of the complexity meaning using it is much easier. 
+
+\textbf{eBPF security}: the BPF does not have a way to load code into the kernel. eBPF's solution to loading arbitrary code in the kernel is to use a bytecode (interpreted) language that gets compiled on runtime in the kernel -- this is similar to how Java and the JVM works. eBPF also has a sanity verifier that sanity tests whatever you pass to it.
+
+{\color{blue}\href{http://www.brendangregg.com/blog/2019-01-01/learn-ebpf-tracing.html}{Great resource if you want more info}}
+
+\subsection{Trace Command}
+TODO: make some spicy examples

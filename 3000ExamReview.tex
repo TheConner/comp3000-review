@@ -15,7 +15,7 @@
 	\maketitle
 
 	\tableofcontents
-
+	
 	%% Pre-midterm stuff
 	\input{sections/EnvironmentVariables}
 	\input{sections/wait}
@@ -37,6 +37,7 @@
 	%% Post midterm stuff - fun
  	%% - dd, relation to system calls
 	\input{sections/DiskDestroyer}
+	
  	%% - mkfs.ext4, df, rsync, chown, mount, umount, sudo, fsck
  	%% - truncate, holes in files, logical vs physical
  	%% - sshfs inodes
@@ -46,11 +47,12 @@
 	%% - setting up keypair-based auth (authorized_keys, id_rsa, id_rsa.pub)
  	%% - superblocks
 	\input{sections/FSEtAl}
+
  	%% - trace command, what you can do with it
  	%%    (very picky commands so will be higher-level questions)
-	
- 	%% - what ebpf is, what it can do
-	
+	%% - what ebpf is, what it can do
+	\input{sections/TraceEBPF}
+
  	%% - what are kernel modules, how they relate to rest of the kernel,
  	%%   how they are different from processes and ebpf scripts
 	
